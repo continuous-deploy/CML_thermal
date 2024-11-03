@@ -13,7 +13,7 @@ y_col = data_col[0]
 X_col = data_col[1:]
 
 """
-For ANN model we can merge all data in one file and result will be sanme
+For ANN model we can merge all data in one file and result will be same
 But for those model where output depends on past data then direct merging 
 will lead to loss of data.
 
@@ -25,7 +25,7 @@ will lead to loss of data.
 # Save temp data
 def save_simple_merged_data(df_lst):
     full_data = pd.concat(df_lst, ignore_index=True)
-    full_data.to_hdf('Temp/simple_milling_data.h5', key='data', mode='w')
+    full_data.to_csv('temp/simple_milling_data.csv', mode='w')
 
 
 def save_past_dependence_merged_data(df_lst, window_size: int = 10):

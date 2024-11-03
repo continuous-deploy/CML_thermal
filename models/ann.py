@@ -10,7 +10,7 @@ class ANN:
         self.model = Sequential()
         
         # Define the model layers
-        self.model.add(Dense(64, input_dim=10, activation='relu'))
+        self.model.add(Dense(64, input_dim=7, activation='relu'))
         self.model.add(Dense(32, activation='relu'))
         self.model.add(Dense(1, activation='linear'))
         
