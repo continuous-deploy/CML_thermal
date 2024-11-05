@@ -2,6 +2,7 @@ from utils.load_data import get_all_files
 import pandas as pd
 import numpy as np
 
+
 file_lst  = get_all_files()
 
 df_lst = [pd.read_csv(file_) for file_ in file_lst]
@@ -28,7 +29,9 @@ def save_simple_merged_data(df_lst):
     full_data.to_csv('temp/simple_milling_data.csv', mode='w')
 
 
+
+
 def save_past_dependence_merged_data(df_lst, window_size: int = 10):
     full_data = pd.concat(df_lst, ignore_index=True)
-    full_data.to_hdf('Temp/simple_milling_data.h5', key='data', mode='w')
+    full_data.to_csv('temp/simple_milling_data.csv', mode='w')
 

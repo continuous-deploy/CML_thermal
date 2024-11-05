@@ -19,7 +19,9 @@ df = pd.read_csv('temp/simple_milling_data.csv')
 
 ann = ANN()
 
-Xtrain, Xtest, Ytrain, Ytest = train_test_split(df[X_col],df[y_col])
+print(df.shape)
+
+Xtrain, Xtest, Ytrain, Ytest = train_test_split(df[X_col],df[y_col], random_state=1)
 
 hist = ann.fit(Xtrain, Ytrain)
 

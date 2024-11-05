@@ -3,6 +3,16 @@
 # https://dvc.org/doc/user-guide/dvcignore
 
 model/
-reequirements.txt
+requirements.txt
 README.md
 train.py
+main.py
+final_model.py
+metrics/
+models/
+.dvc
+.github
+.cmlEnv
+temp/
+utils/
+
