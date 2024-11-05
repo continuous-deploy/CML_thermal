@@ -46,14 +46,16 @@ class ANN:
 
         # Create directory if it doesn't exist
         os.makedirs(save_path, exist_ok=True)
-        plot_path = os.path.join(save_path, f'ann_performance_{datetime.now().date()}.png')
+        plot_path = os.path.join(save_path, f'ann_{np.round(mse,1)}_{datetime.now().timestamp()}.png')
 
         # Save the plot
         plt.savefig(plot_path)
         print(f"Plot saved at {plot_path}")
+        
+        return mse
 
 
-    def save_model(self, path="models/ann_model.h5"):
+    def save_model(self, path=f"models/ann_model_{datetime.now().date()}.keras"):
         # Save the model using Keras's save method
         os.makedirs(os.path.dirname(path), exist_ok=True)
         self.model.save(path)
@@ -61,7 +63,7 @@ class ANN:
 
 
 class old_ann_model(ANN):
-    def __init__(self, model_path: str = "models/ann_model.h5"):
+    def __init__(self, model_path: str = "models/ann_model.keras"):
         # Check if the model file exists
         if os.path.exists(model_path):
             self.model = load_model(model_path)
@@ -77,12 +79,8 @@ class old_ann_model(ANN):
         os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
         self.model.save(self.model_path)
         print("Model saved to", self.model_path)
-    
-    def fit(self, X, y, epochs=100, batch_size=32, validation_ratio=0.2):
-        # Train the model
-        history = self.model.fit(X, y, epochs=epochs, batch_size=batch_size, validation_split=validation_ratio)
-        return history
 
-    def test(self, X_test, y_test, save_path="metrics/ann"):
+
+    def test(self, X_test, y_test, save_path="metrics/ann_old"):
         # Call the test method from the base class to evaluate and plot results
         super().test(X_test, y_test, save_path)
