@@ -1,0 +1,10 @@
+{
+    "old_model_MSE": {
+        "old_data":0.56,
+        "new_data":0.44
+    },
+    "new_model_MSE": {
+        "old_data": 0.78,
+        "new_data": 0.34
+    }
+}

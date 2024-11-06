@@ -3,6 +3,7 @@ from tensorflow.keras.layers import Dense
 from matplotlib import pyplot as plt
 import os
 from datetime import datetime
+import pickle
 
 
 class ANN:
@@ -54,3 +55,7 @@ class ANN:
 
 
         print(f"Plot saved at {plot_path}")
+
+    def save_model(self, file_path:str = f"models/ann{datetime.now().date()}.pkl"):
+        with open(file_path, 'wb') as file:
+            pickle.dump(self.model, file)
