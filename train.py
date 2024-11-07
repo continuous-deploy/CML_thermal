@@ -7,7 +7,7 @@ As this file is triggered, It should do folowing task:
 
 import pandas as pd
 
-from models.ann import ANN
+from models.ann import ANN, old_ann_model
 from models.lstm import LSTM
 
 from utils.preprocess_data import load_and_concat_data
@@ -21,12 +21,12 @@ test_data = pd.read_csv('temp/test_data_simple.csv')
 
 
 ann = ANN()
+ann_old = old_ann_model()
 
-hist = ann.fit(training_data[X_col], training_data[y_col])
+ann_old.evaluate(test_data)
 
-ann.test(test_data[X_col], test_data[y_col])
+ann.fit_and_evaluate(training_data, test_data)
 
 ann.save_model()
 
-#Save into metrics
 
