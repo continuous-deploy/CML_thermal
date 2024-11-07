@@ -3,12 +3,7 @@ from tensorflow.keras.layers import Dense
 from matplotlib import pyplot as plt
 import os
 from datetime import datetime
-<<<<<<< HEAD
-import pickle
-
-=======
 import numpy as np
->>>>>>> refs/remotes/origin/main
 
 class ANN:
     def __init__(self):
@@ -60,13 +55,6 @@ class ANN:
         return mse
 
 
-<<<<<<< HEAD
-        print(f"Plot saved at {plot_path}")
-
-    def save_model(self, file_path:str = f"models/ann{datetime.now().date()}.pkl"):
-        with open(file_path, 'wb') as file:
-            pickle.dump(self.model, file)
-=======
     def save_model(self, path=f"models/ann_model_{datetime.now().date()}.keras"):
         # Save the model using Keras's save method
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -83,17 +71,4 @@ class old_ann_model(ANN):
         else:
             super().__init__()  # Initialize a new model if file does not exist
             print("Model file not found. Initialized a new model.")
-        
-        self.model_path = model_path
-
-    def save_model(self):
-        # Override save_model to save the current model instance to the specified path
-        os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
-        self.model.save(self.model_path)
-        print("Model saved to", self.model_path)
-
-
-    def test(self, X_test, y_test, save_path="metrics/ann_old"):
-        # Call the test method from the base class to evaluate and plot results
-        super().test(X_test, y_test, save_path)
->>>>>>> refs/remotes/origin/main
+   

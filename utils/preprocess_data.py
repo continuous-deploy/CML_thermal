@@ -1,6 +1,7 @@
-from utils.load_data import get_all_files
+from utils.load_data import load_data
 import pandas as pd
 import numpy as np
+import os
 from sklearn.model_selection import train_test_split
 
 y_col = ["Dia Disp"]
@@ -15,9 +16,14 @@ will lead to loss of data.
 
 
 # Save temp data
-def save_simple_merged_data(df_lst):
+def load_and_concat_data():
+    df_lst = load_data(3)
+
     full_data = pd.concat(df_lst, ignore_index=True)
     training_data, test_data = train_test_split(full_data, random_state = 1)
+
+    os.makedirs("temp", exist_ok=True)
+
     training_data.to_csv('temp/training_data_simple.csv', mode='w')
     test_data.to_csv('temp/test_data_simple.csv', mode='w')
 
