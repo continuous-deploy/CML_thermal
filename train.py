@@ -23,9 +23,9 @@ test_data = pd.read_csv('temp/test_data_simple.csv')
 ann = ANN()
 ann_old = old_ann_model()
 
-ann_old.evaluate(test_data)
+old_ann_mse = ann_old.evaluate(test_data)
 
-ann.fit_and_evaluate(training_data, test_data)
+_, new_ann_mse = ann.fit_and_evaluate(training_data, test_data)
 
 ann.save_model()
 

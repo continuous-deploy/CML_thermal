@@ -86,3 +86,4 @@ class old_ann_model(ANN):
     def evaluate(self, test_data):
         mse = self.test(test_data[X_col], test_data[y_col])
         return mse
+    
