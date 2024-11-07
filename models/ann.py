@@ -22,7 +22,7 @@ class ANN:
         # Display the model summary
         return self.model.summary()
     
-    def fit(self, X, y, epochs:int = 100, batch_size:int = 32, validation_ratio:float = 0.2):
+    def fit_model(self, X, y, epochs:int = 100, batch_size:int = 32, validation_ratio:float = 0.2):
         # Train the model
         history = self.model.fit(X, y, epochs=epochs, batch_size=batch_size, validation_split=validation_ratio)
         return history
@@ -57,9 +57,9 @@ class ANN:
         return mse
 
     def fit_and_evaluate(self, train_data, test_data):
-        history = self.model.fit(self, train_data[X_col], train_data[y_col], epochs=100, batch_size=32, validation_ratio=0.2)
+        history = self.fit_model(train_data[X_col], train_data[y_col], epochs=100, batch_size=32, validation_ratio=0.2)
 
-        mse = self.model.test(test_data[X_col], test_data[y_col])
+        mse = self.test(test_data[X_col], test_data[y_col])
 
         return history, mse
     
@@ -84,5 +84,5 @@ class old_ann_model(ANN):
    
     
     def evaluate(self, test_data):
-        mse = self.model.test(test_data[X_col], test_data[y_col])
+        mse = self.test(test_data[X_col], test_data[y_col])
         return mse
