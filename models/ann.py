@@ -5,6 +5,8 @@ import os
 from datetime import datetime
 import numpy as np
 
+from utils.preprocess_data import X_col, y_col
+
 class ANN:
     def __init__(self):
         self.model = Sequential()
@@ -20,7 +22,7 @@ class ANN:
         # Display the model summary
         return self.model.summary()
     
-    def fit(self, X, y, epochs=100, batch_size=32, validation_ratio=0.2):
+    def fit(self, X, y, epochs:int = 100, batch_size:int = 32, validation_ratio:float = 0.2):
         # Train the model
         history = self.model.fit(X, y, epochs=epochs, batch_size=batch_size, validation_split=validation_ratio)
         return history
@@ -54,8 +56,16 @@ class ANN:
         
         return mse
 
+    def fit_and_evaluate(self, train_data, test_data):
+        history = self.model.fit(self, train_data[X_col], train_data[y_col], epochs=100, batch_size=32, validation_ratio=0.2)
 
-    def save_model(self, path=f"models/ann_model_{datetime.now().date()}.keras"):
+        mse = self.model.test(test_data[X_col], test_data[y_col])
+
+        return history, mse
+    
+
+
+    def save_model(self, path=f"models/ann_model.keras"):
         # Save the model using Keras's save method
         os.makedirs(os.path.dirname(path), exist_ok=True)
         self.model.save(path)
@@ -72,3 +82,7 @@ class old_ann_model(ANN):
             super().__init__()  # Initialize a new model if file does not exist
             print("Model file not found. Initialized a new model.")
    
+    
+    def evaluate(self, test_data):
+        mse = self.model.test(test_data[X_col], test_data[y_col])
+        return mse
