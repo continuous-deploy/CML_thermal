@@ -9,6 +9,8 @@ import pandas as pd
 
 from models.ann import ANN, old_ann_model
 from models.lstm import LSTM
+from models.random_forest import RandomForestModel
+from models.xgb import XGBoostModel
 
 from utils.preprocess_data import load_and_concat_data
 from utils.preprocess_data import X_col, y_col
@@ -20,13 +22,26 @@ training_data = pd.read_csv('temp/training_data_simple.csv')
 test_data = pd.read_csv('temp/test_data_simple.csv')
 
 
-ann = ANN()
-ann_old = old_ann_model()
+# ann = ANN()
+# ann_old = old_ann_model()
 
-old_ann_mse = ann_old.evaluate(test_data)
+# old_ann_mse = ann_old.evaluate(test_data)
 
-_, new_ann_mse = ann.fit_and_evaluate(training_data, test_data)
+# _, new_ann_mse = ann.fit_and_evaluate(training_data, test_data)
 
-ann.save_model()
+# ann.save_model()
+
+
+rf_model = RandomForestModel()
+#old_rf_model = RandomForestModel.load_model("models/old_random_forest_model.pkl")
+
+# Evaluate the old model
+#old_rf_mse = old_rf_model.test(test_data[X_col], test_data[y_col])
+
+# Fit and evaluate the new model
+new_rf_mse = rf_model.fit_and_evaluate(training_data, test_data, X_col, y_col)
+
+# Save the new model
+rf_model.save_model()
 
 
