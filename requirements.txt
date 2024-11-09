@@ -84,6 +84,7 @@ namex==0.0.8
 networkx==3.4.1
 nh3==0.2.18
 numpy==1.26.4
+nvidia-nccl-cu12==2.23.4
 omegaconf==2.3.0
 opt_einsum==3.4.0
 optree==0.13.0
@@ -151,6 +152,7 @@ wcwidth==0.2.13
 websocket-client==1.8.0
 Werkzeug==3.0.4
 wrapt==1.16.0
+xgboost==2.1.2
 yarl==1.15.5
 zc.lockfile==3.0.post1
 zipp==3.20.2
