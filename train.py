@@ -12,11 +12,12 @@ from models.lstm import LSTM
 from models.random_forest import RandomForestModel
 from models.xgb import XGBoostModel
 
-from utils.preprocess_data import load_and_concat_data
+from utils.preprocess_data import load_and_concat_data, save_past_dependence_merged_data
 from utils.preprocess_data import X_col, y_col
 
 
 load_and_concat_data()
+save_past_dependence_merged_data()
 
 training_data = pd.read_csv('temp/training_data_simple.csv')
 test_data = pd.read_csv('temp/test_data_simple.csv')
@@ -62,3 +63,5 @@ test_data = pd.read_csv('temp/test_data_simple.csv')
 # # Save the model
 # xgboost_model.save_model("models/xgboost_model.pkl")
 
+
+# LSTM model
