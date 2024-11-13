@@ -40,7 +40,9 @@ def save_past_dependence_merged_data(window_size: int = 10):
     """
     df_lst = load_data(3)  # Load list of dataframes as needed
     X_data, y_data = [], []
-    save_path = 'temp/timedependent_compressed.npz'
+
+    save_path_train = 'temp/timedependent_train_compressed.npz'
+    save_path_test = 'temp/timedependent_test_compressed.npz'
 
     for df in df_lst:
         df = df.dropna().reset_index(drop=True)  # Drop NaN values and reset index if needed
@@ -59,10 +61,9 @@ def save_past_dependence_merged_data(window_size: int = 10):
     X_data = np.array(X_data)
     y_data = np.array(y_data)
 
-    # Ensure directory exists and save the .npz file
-    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    np.savez_compressed(save_path, X=X_data, y=y_data)
-    print(f"Data saved to {save_path}")
+    trainX, testX, train_y, test_y = train_test_split(X_data, y_data, random_state=42)
 
-# Call the function
-save_past_dependence_merged_data()
+    # Ensure directory exists and save the .npz file
+    np.savez_compressed(save_path_train, X=trainX, y=train_y)
+    np.savez_compressed(save_path_test, X=testX, y=test_y)
+    print(f"Data saved to temp/...")

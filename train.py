@@ -6,14 +6,15 @@ As this file is triggered, It should do folowing task:
 """
 
 import pandas as pd
-
+import numpy as np
 from models.ann import ANN, old_ann_model
-from models.lstm import LSTM
+from models.lstm import LSTMModel
 from models.random_forest import RandomForestModel
 from models.xgb import XGBoostModel
 
 from utils.preprocess_data import load_and_concat_data, save_past_dependence_merged_data
 from utils.preprocess_data import X_col, y_col
+from utils.make_report import create_report
 
 
 load_and_concat_data()
@@ -22,6 +23,8 @@ save_past_dependence_merged_data()
 training_data = pd.read_csv('temp/training_data_simple.csv')
 test_data = pd.read_csv('temp/test_data_simple.csv')
 
+timeseries_train = np.load("temp/timedependent_train_compressed.npz")
+timeseries_test = np.load("temp/timedependent_train_compressed.npz") 
 
 # ann = ANN()
 # ann_old = old_ann_model()
@@ -65,3 +68,19 @@ test_data = pd.read_csv('temp/test_data_simple.csv')
 
 
 # LSTM model
+trainX, train_y = timeseries_train['X'], timeseries_train['y']
+testX, test_y = timeseries_test['X'], timeseries_test['y']
+
+m,n,h = trainX.shape
+
+lstm_model = LSTMModel(input_shape=(n,h))
+
+lstm_model.fit(trainX, train_y)
+lstm_model.save_model()
+lstm_model.evaluate_model(testX, test_y, "new_model")
+
+
+
+
+
+create_report()
