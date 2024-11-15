@@ -17,9 +17,14 @@ def get_recent_images(metrics_folder_path:str="metrics", num_images=8):
     return recent_image_paths
 
 
-def create_report(image_paths = get_recent_images()):
+def create_report(folder_path = "metrics"):
     # Create a figure and a 2x2 grid of subplots
+    image_paths = get_recent_images(metrics_folder_path=folder_path)
+    
     m,n = len(image_paths)//2, 2
+
+    # print(image_paths)
+
     fig, axs = plt.subplots(m, n, figsize=(10, 10))
 
     # Loop through each subplot and each image

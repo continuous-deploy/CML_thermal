@@ -84,7 +84,7 @@ testX, test_y = test_data['X'], test_data['y']
 
 m,n,h = trainX.shape
 
-print(trainX.shape, testX.shape)
+# print(trainX.shape, testX.shape)
 
 lstm_model = LSTMModel(input_shape=(n,h))
 
@@ -95,9 +95,6 @@ lstm_model.fit(trainX, train_y)
 lstm_new_mse = lstm_model.evaluate_model(testX, test_y, "new_model")
 
 lstm_model.save_model()
-
-
-
 
 
 create_report()
