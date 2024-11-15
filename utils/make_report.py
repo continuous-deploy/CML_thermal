@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from datetime import datetime
 import matplotlib.image as mpimg
 import glob
 import os
@@ -29,5 +30,5 @@ def create_report(image_paths = get_recent_images()):
 
     # Adjust layout and save the final report image
     plt.tight_layout()
-    plt.savefig('combined_report.png', dpi=300)  # Save as a high-resolution image
+    plt.savefig(f'combined_report{datetime.now().datetime()}.png', dpi=300)  # Save as a high-resolution image
     plt.show()
