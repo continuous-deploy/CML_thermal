@@ -32,4 +32,8 @@ def create_report(image_paths = get_recent_images()):
     # Adjust layout and save the final report image
     plt.tight_layout()
     plt.savefig(f'report/combined_report_{int(datetime.now().timestamp())}.png', dpi=300)  # Save as a high-resolution image
-    plt.show()
+
+
+
+if __name__ == "__main__":
+    print(get_recent_images())
