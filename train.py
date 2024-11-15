@@ -18,11 +18,6 @@ save_past_dependence_merged_data()
 training_data = pd.read_csv('temp/training_data_simple.csv')
 test_data = pd.read_csv('temp/test_data_simple.csv')
 
-trainX = training_data[X_col]
-train_y = training_data[y_col]
-
-testX = test_data[X_col]
-test_y = test_data[y_col]
 
 
 # Model 1: ANN
@@ -79,7 +74,7 @@ xgboost_model.save_model()
 
 # Loading data for LSTM, timeseries model
 training_data = np.load("temp/timedependent_train_compressed.npz")
-test_data = np.load("temp/timedependent_train_compressed.npz") 
+test_data = np.load("temp/timedependent_test_compressed.npz") 
 
 
 
@@ -88,6 +83,8 @@ trainX, train_y = training_data['X'], training_data['y']
 testX, test_y = test_data['X'], test_data['y']
 
 m,n,h = trainX.shape
+
+print(trainX.shape, testX.shape)
 
 lstm_model = LSTMModel(input_shape=(n,h))
 

@@ -29,8 +29,6 @@ def load_and_concat_data():
 
 
 
-
-
 def save_past_dependence_merged_data(window_size: int = 10):
     """
     Prepares and saves data for LSTM model with a sliding window approach.
@@ -47,7 +45,7 @@ def save_past_dependence_merged_data(window_size: int = 10):
     for df in df_lst:
         df = df.dropna().reset_index(drop=True)  # Drop NaN values and reset index if needed
         m, n = df.shape
-
+        
         # Generate sequences for the current dataframe
         for i in range(m - window_size):
             # Extract window of features (excluding the first column as features)
@@ -61,7 +59,7 @@ def save_past_dependence_merged_data(window_size: int = 10):
     X_data = np.array(X_data)
     y_data = np.array(y_data)
 
-    trainX, testX, train_y, test_y = train_test_split(X_data, y_data, random_state=42)
+    trainX, testX, train_y, test_y = train_test_split(X_data, y_data, test_size=0.2, random_state=42)
 
     # Ensure directory exists and save the .npz file
     np.savez_compressed(save_path_train, X=trainX, y=train_y)

@@ -14,8 +14,7 @@ class LSTMModel:
             self.model = Sequential()
             
             # Define the LSTM layers
-            self.model.add(LSTM(64, input_shape=input_shape, return_sequences=True))
-            self.model.add(LSTM(32, return_sequences=False))
+            self.model.add(LSTM(64, activation='relu', input_shape=input_shape))
             self.model.add(Dense(1, activation='linear'))
             
             # Compile the model
@@ -48,7 +47,7 @@ class LSTMModel:
         plt.figure(figsize=(10, 6))
         plt.plot(y, label='Actual value')
         plt.plot(y_pred, label='Predicted value')
-        plt.title(f'Actual vs Predicted\n{tag}')
+        plt.title(f'Actual vs Predicted\nMSE:{past_evaluation[0]}, MAE:{past_evaluation[1]}-{tag}')
         plt.xlabel('Sample')
         plt.ylabel('Value')
         plt.legend()
