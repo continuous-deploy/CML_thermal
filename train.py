@@ -1,10 +1,3 @@
-"""
-This file will trigger model retrainning after importingg all the models from model folder
-
-As this file is triggered, It should do folowing task:
-1. 
-"""
-
 import pandas as pd
 import numpy as np
 from models.ann import ANN, old_ann_model
@@ -16,68 +9,95 @@ from utils.preprocess_data import load_and_concat_data, save_past_dependence_mer
 from utils.preprocess_data import X_col, y_col
 from utils.make_report import create_report
 
-
+# prepare data for model
 load_and_concat_data()
 save_past_dependence_merged_data()
 
+
+# load data for training
 training_data = pd.read_csv('temp/training_data_simple.csv')
 test_data = pd.read_csv('temp/test_data_simple.csv')
 
-timeseries_train = np.load("temp/timedependent_train_compressed.npz")
-timeseries_test = np.load("temp/timedependent_train_compressed.npz") 
+trainX = training_data[X_col]
+train_y = training_data[y_col]
 
-# ann = ANN()
-# ann_old = old_ann_model()
-
-# old_ann_mse = ann_old.evaluate(test_data)
-
-# _, new_ann_mse = ann.fit_and_evaluate(training_data, test_data)
-
-# ann.save_model()
+testX = test_data[X_col]
+test_y = test_data[y_col]
 
 
+# Model 1: ANN
+ann = ANN()
 
+# Evaluation of old model on recent data
+ann_old_mse = ann.evaluate(test_data[X_col], test_data[y_col], tag="old")
 
+# Retaining of ANN model with recent data
+hist = ann.fit_model(training_data[X_col], training_data[y_col])
 
-# rf_model = RandomForestModel()
-# #old_rf_model = RandomForestModel.load_model("models/old_random_forest_model.pkl")
+# Evaluation of new model on recent data
+ann_old_mse = ann.evaluate(test_data[X_col], test_data[y_col], tag="new")
 
-# # Evaluate the old model
-# #old_rf_mse = old_rf_model.test(test_data[X_col], test_data[y_col])
-
-# # Fit and evaluate the new model
-# new_rf_mse = rf_model.fit_and_evaluate(training_data, test_data, X_col, y_col)
-
-# # Save the new model
-# rf_model.save_model()
+# Saving of latest model
+ann.save_model()
 
 
 
 
-# # Xgboost model
-# xgboost_model = XGBoostModel.load_model(model_path="models/xgboost_model.pkl", n_estimators=100, max_depth=3, learning_rate=0.1)
+# Model 2: Random Forest
+rf_model = RandomForestModel()
 
-# # Evaluate model performance on new data
+# Evaluate the old model
+old_rf_mse = rf_model.evaluate(test_data[X_col], test_data[y_col], tag="old")
+
+# Fit and evaluate the new model
+new_rf_mse = rf_model.fit_model(training_data[X_col], training_data[y_col])
+
+# Evaluate the new model
+old_rf_mse = rf_model.evaluate(test_data[X_col], test_data[y_col], tag="new")
+
+# Save the new model
+rf_model.save_model()
 
 
-# # Train and evaluate the model by retraining it
-# mse = xgboost_model.fit_and_evaluate(training_data, test_data, X_col=X_col, y_col=y_col)
 
-# # Save the model
-# xgboost_model.save_model("models/xgboost_model.pkl")
+# Model 3: XGBoost
+xgboost_model = XGBoostModel()
+
+# Evaluate old model performance on new data
+xgboost_model.evaluate(test_data[X_col], test_data[y_col], title="old")
+
+# Train and evaluate the model by retraining it
+xgb_mse = xgboost_model.fit_model(training_data[X_col], training_data[y_col])
+
+# Evaluate old model performance on new data
+xgboost_model.evaluate(test_data[X_col], test_data[y_col], title="new")
+
+# Save the model
+xgboost_model.save_model()
 
 
-# LSTM model
-trainX, train_y = timeseries_train['X'], timeseries_train['y']
-testX, test_y = timeseries_test['X'], timeseries_test['y']
+
+# Loading data for LSTM, timeseries model
+training_data = np.load("temp/timedependent_train_compressed.npz")
+test_data = np.load("temp/timedependent_train_compressed.npz") 
+
+
+
+# Model 4: LSTM
+trainX, train_y = training_data['X'], training_data['y']
+testX, test_y = test_data['X'], test_data['y']
 
 m,n,h = trainX.shape
 
 lstm_model = LSTMModel(input_shape=(n,h))
 
+lstm_old_mse = lstm_model.evaluate_model(testX, test_y, "old_model")
+
 lstm_model.fit(trainX, train_y)
+
+lstm_new_mse = lstm_model.evaluate_model(testX, test_y, "new_model")
+
 lstm_model.save_model()
-lstm_model.evaluate_model(testX, test_y, "new_model")
 
 
 
