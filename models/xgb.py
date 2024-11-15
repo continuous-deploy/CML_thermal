@@ -19,10 +19,10 @@ class XGBoostModel:
         # Train the model
         self.model.fit(X, y)
         
-    def evaluate(self, X, y, title:str, save_path="metrics/xgboost"):
+    def evaluate(self, X, y, tag:str, save_path="metrics/xgboost"):
         # Predict on test data and evaluate metrics
         y_pred = self.model.predict(X)
-        mse = mean_squared_error(X, y)
+        mse = mean_squared_error(y, y_pred)
         mae = mean_absolute_error(y, y_pred)
         print(f"Test MSE: {mse}, Test MAE: {mae}")
         
@@ -32,12 +32,12 @@ class XGBoostModel:
         plt.plot(y_pred, label='Predicted Values', color='r')
         plt.xlabel('Samples')
         plt.ylabel('Values')
-        plt.title(f"Actual vs Predicted Values\nMSE: {mse:.4f}, MAE: {mae:.4f}: "+title)
+        plt.title(f"Actual vs Predicted Values\nMSE: {mse:.4f}, MAE: {mae:.4f}: "+tag)
         plt.legend()
 
         # Create directory if it doesn't exist
         os.makedirs(save_path, exist_ok=True)
-        plot_path = os.path.join(save_path, f'xgb_eval_{title}_{int(datetime.now().timestamp())}.png')
+        plot_path = os.path.join(save_path, f'xgb_eval_{tag}_{int(datetime.now().timestamp())}.png')
 
         # Save the plot
         plt.savefig(plot_path)

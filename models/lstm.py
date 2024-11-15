@@ -39,7 +39,7 @@ class LSTMModel:
         self.model.save(path)
         print(f"Model saved at {path}")
 
-    def evaluate_model(self, X, y, title:str, save_path:str="metrics/lstm/lstm_eval"):        
+    def evaluate_model(self, X, y, tag:str, save_path:str="metrics/lstm/lstm_eval"):        
         # Evaluate past model on recent data
         past_evaluation = self.model.evaluate(X, y, verbose=0)
         y_pred = self.model.predict(X)
@@ -48,11 +48,11 @@ class LSTMModel:
         plt.figure(figsize=(10, 6))
         plt.plot(y, label='Actual value')
         plt.plot(y_pred, label='Predicted value')
-        plt.title(f'Actual vs Predicted\n{title}')
+        plt.title(f'Actual vs Predicted\n{tag}')
         plt.xlabel('Sample')
         plt.ylabel('Value')
         plt.legend()
-        plt.savefig(save_path + f"{title}" + f"{int(datetime.now().timestamp())}.png")
+        plt.savefig(save_path + f"_{tag}_" + f"{int(datetime.now().timestamp())}.png")
 
         print(f"LSTM Model Evaluation on Recent Data - Loss: {past_evaluation[0]}, MAE: {past_evaluation[1]}")
         

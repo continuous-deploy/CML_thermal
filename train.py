@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from models.ann import ANN, old_ann_model
+from models.ann import ANN
 from models.lstm import LSTMModel
 from models.random_forest import RandomForestModel
 from models.xgb import XGBoostModel
@@ -64,13 +64,13 @@ rf_model.save_model()
 xgboost_model = XGBoostModel()
 
 # Evaluate old model performance on new data
-xgboost_model.evaluate(test_data[X_col], test_data[y_col], title="old")
+xgboost_model.evaluate(test_data[X_col], test_data[y_col], tag="old")
 
 # Train and evaluate the model by retraining it
 xgb_mse = xgboost_model.fit_model(training_data[X_col], training_data[y_col])
 
 # Evaluate old model performance on new data
-xgboost_model.evaluate(test_data[X_col], test_data[y_col], title="new")
+xgboost_model.evaluate(test_data[X_col], test_data[y_col], tag="new")
 
 # Save the model
 xgboost_model.save_model()
