@@ -8,7 +8,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from typing import List
 
 class XGBoostModel:
-    def __init__(self, n_estimators:int = 100, max_depth:int = 3, learning_rate:float = 0.1, model_path:str = "models/xgb.py"):
+    def __init__(self, n_estimators:int = 100, max_depth:int = 3, learning_rate:float = 0.1, model_path:str = "models/xgboost_model.pkl"):
         if os.path.exists(model_path):
             self.model = joblib.load(model_path)
         else:
