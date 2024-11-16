@@ -1,4 +1,5 @@
 data/*
+excel_csv/*.csv
 .cmlEnv
 .cmlEnv
 CMLenv/
