@@ -9,6 +9,10 @@ from utils.preprocess_data import load_and_concat_data, save_past_dependence_mer
 from utils.preprocess_data import X_col, y_col
 from utils.make_report import create_report
 
+import os
+# To disable floating-point round-off errors from different computation orders
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
 # prepare data for model
 load_and_concat_data()
 save_past_dependence_merged_data()
@@ -30,7 +34,7 @@ ann_old_mse = ann.evaluate(test_data[X_col], test_data[y_col], tag="old")
 hist = ann.fit_model(training_data[X_col], training_data[y_col])
 
 # Evaluation of new model on recent data
-ann_old_mse = ann.evaluate(test_data[X_col], test_data[y_col], tag="new")
+ann_new_mse = ann.evaluate(test_data[X_col], test_data[y_col], tag="new")
 
 # Saving of latest model
 ann.save_model()
@@ -45,10 +49,10 @@ rf_model = RandomForestModel()
 old_rf_mse = rf_model.evaluate(test_data[X_col], test_data[y_col], tag="old")
 
 # Fit and evaluate the new model
-new_rf_mse = rf_model.fit_model(training_data[X_col], training_data[y_col])
+rf_model.fit_model(training_data[X_col], training_data[y_col])
 
 # Evaluate the new model
-old_rf_mse = rf_model.evaluate(test_data[X_col], test_data[y_col], tag="new")
+new_rf_mse = rf_model.evaluate(test_data[X_col], test_data[y_col], tag="new")
 
 # Save the new model
 rf_model.save_model()
@@ -59,13 +63,13 @@ rf_model.save_model()
 xgboost_model = XGBoostModel()
 
 # Evaluate old model performance on new data
-xgboost_model.evaluate(test_data[X_col], test_data[y_col], tag="old")
+old_xgb_mse = xgboost_model.evaluate(test_data[X_col], test_data[y_col], tag="old")
 
 # Train and evaluate the model by retraining it
-xgb_mse = xgboost_model.fit_model(training_data[X_col], training_data[y_col])
+xgboost_model.fit_model(training_data[X_col], training_data[y_col])
 
 # Evaluate old model performance on new data
-xgboost_model.evaluate(test_data[X_col], test_data[y_col], tag="new")
+new_xgb_mse = xgboost_model.evaluate(test_data[X_col], test_data[y_col], tag="new")
 
 # Save the model
 xgboost_model.save_model()
@@ -95,6 +99,30 @@ lstm_model.fit(trainX, train_y)
 lstm_new_mse = lstm_model.evaluate_model(testX, test_y, "new_model")
 
 lstm_model.save_model()
+
+
+
+
+# The file path to your CSV
+old_model_performanc = 'metrics/old_model_performance.csv'
+new_model_performanc = 'metrics/new_model_performance.csv'
+
+
+# The new line of data to be added (ensure it matches the column structure)
+new_line_for_old_model = f"{ann_old_mse},{old_rf_mse},{old_xgb_mse},{lstm_old_mse}\n"  # Example data in CSV format
+new_line_for_new_model = f"{ann_new_mse},{new_rf_mse},{new_xgb_mse},{lstm_new_mse}\n"  # Example data in CSV formmat
+# new_line = "1.02, 2.05, 3.002, 3.01\n"
+
+# Open the file in append mode and write the new line
+with open(old_model_performanc, mode='a', newline="") as file:
+    file.write(new_line_for_old_model)
+
+with open(new_model_performanc, mode='a', newline="") as file:
+    file.write(new_line_for_new_model)
+
+
+print("Line added successfully!")
+
 
 
 create_report()

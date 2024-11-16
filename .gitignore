@@ -6,5 +6,5 @@ CMLenv/
 *Env 
 /data
 temp/
-.pyc
+*.pyc
 __pyache__
