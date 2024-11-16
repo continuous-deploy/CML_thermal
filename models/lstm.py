@@ -28,9 +28,9 @@ class LSTMModel:
         # Checkpoint to save model weights
         if save_temp:
             checkpoint = ModelCheckpoint("temp_lstm_model.h5", save_best_only=True, monitor="val_loss")
-            history = self.model.fit(X, y, epochs=epochs, batch_size=batch_size, validation_split=validation_ratio, callbacks=[checkpoint])
+            history = self.model.fit(X, y, epochs=epochs, batch_size=batch_size, validation_split=validation_ratio, callbacks=[checkpoint], verbose=0)
         else:
-            history = self.model.fit(X, y, epochs=epochs, batch_size=batch_size, validation_split=validation_ratio)
+            history = self.model.fit(X, y, epochs=epochs, batch_size=batch_size, validation_split=validation_ratio, verbose=0)
         return history
 
     def save_model(self, path="models/lstm_model.keras"):
@@ -55,4 +55,4 @@ class LSTMModel:
 
         print(f"LSTM Model Evaluation on Recent Data - Loss: {past_evaluation[0]}, MAE: {past_evaluation[1]}")
         
-        return {"mse": past_evaluation[0], "mae": past_evaluation[1]}
+        return past_evaluation[0]

@@ -27,7 +27,7 @@ class ANN:
     
     def fit_model(self, X, y, epochs:int = 100, batch_size:int = 32, validation_ratio:float = 0.2):
         # Train the model
-        history = self.model.fit(X, y, epochs=epochs, batch_size=batch_size, validation_split=validation_ratio)
+        history = self.model.fit(X, y, epochs=epochs, batch_size=batch_size, validation_split=validation_ratio, verbose=0)
         return history
 
     def evaluate(self, X_test, y_test, tag:str, save_path="metrics/ann"):
