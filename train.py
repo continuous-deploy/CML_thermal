@@ -20,15 +20,15 @@ def analyse_model_and_make_report():
     test_data = pd.read_csv('temp/test_data_simple.csv')
 
 
-
     # Model 1: ANN
     ann = ANN()
+
 
     # Evaluation of old model on recent data
     ann_old_mse = ann.evaluate(test_data[X_col], test_data[y_col], tag="old")
 
     # Retaining of ANN model with recent data
-    hist = ann.fit_model(training_data[X_col], training_data[y_col])
+    ann.fit_model(training_data[X_col], training_data[y_col])
 
     # Evaluation of new model on recent data
     ann_new_mse = ann.evaluate(test_data[X_col], test_data[y_col], tag="new")

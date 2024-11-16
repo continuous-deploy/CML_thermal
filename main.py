@@ -33,7 +33,7 @@ for file_path in file_paths:
     destination_path = os.path.join(destination_dir, os.path.basename(file_path))
     
     # Move the file to the destination folder
-    #shutil.move(file_path, destination_path)
+    shutil.move(file_path, destination_path)
     print(f"{destination_path}  &&&&  {file_path}")
     
     # Step 4: Call the function to execute further steps on the moved file
