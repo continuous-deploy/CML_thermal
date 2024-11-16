@@ -1,42 +1,35 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 
 # Load data from the CSV files
 file1 = "metrics/old_model_performance.csv"  # Replace with your first CSV file path
 file2 = "metrics/new_model_performance.csv"  # Replace with your second CSV file path
 
-df1 = pd.read_csv(file1)  # Old values
-df2 = pd.read_csv(file2)  # New values
+# Read CSV files into DataFrames
+df1 = pd.read_csv(file1)
+df2 = pd.read_csv(file2)
 
-# Ensure both DataFrames have the same columns
-if not all(df1.columns == df2.columns):
-    raise ValueError("The two files must have identical columns for comparison.")
-
-# Average the data for comparison (if needed, adjust logic as per data structure)
-df1_avg = df1.mean()
-df2_avg = df2.mean()
+# Define a fixed color cycle
+colors = ['red', 'green', 'blue', 'black']
 
 # Plot settings
-x = np.arange(len(df1_avg))  # Positions for the bars
-width = 0.35  # Width of the bars
+plt.figure(figsize=(10, 6))
 
-plt.figure(figsize=(12, 6))
+# Plot data from the first file with dotted lines
+for i, column in enumerate(df1.columns):
+    plt.plot(df1.index, df1[column], linestyle=':', color=colors[i % len(colors)], label=f'{column} (dotted)')
 
-# Create bars for old values
-plt.bar(x - width / 2, df1_avg, width, label='Old Values', color='blue')
+# Plot data from the second file with solid lines
+for i, column in enumerate(df2.columns):
+    plt.plot(df2.index, df2[column], linestyle='-', color=colors[i % len(colors)], label=f'{column} (solid)')
 
-# Create bars for new values
-plt.bar(x + width / 2, df2_avg, width, label='New Values', color='orange')
-
-# Add labels, title, and legend
-plt.xlabel('Metrics')
+# Add labels, title, legend, and grid
+plt.xlabel('Index')
 plt.ylabel('Values')
-plt.title('Comparison of Old and New Values')
-plt.xticks(ticks=x, labels=df1.columns, rotation=45)
+plt.title('Comparison of Two CSV Files')
 plt.legend()
-plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.grid(True)
 
-# Show plot
+# Show the plot
 plt.tight_layout()
 plt.show()
