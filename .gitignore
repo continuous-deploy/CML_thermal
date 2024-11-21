@@ -1,0 +1,11 @@
+data/*
+excel_csv/*.csv
+.cmlEnv
+.cmlEnv
+CMLenv/
+*env
+*Env 
+/data
+temp/
+*.pyc
+__pyache__
