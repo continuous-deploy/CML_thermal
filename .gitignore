@@ -9,3 +9,4 @@ CMLenv/
 temp/
 *.pyc
 __pyache__
+metrics/
