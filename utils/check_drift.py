@@ -1,18 +1,11 @@
-import pandas as pd
 import math
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-import os
-from datetime import datetime
-
 from evidently.report import Report
 from evidently.metric_preset import DataDriftPreset
 
-# reff_data = 
-# curr_data = 
-
-def visualize_drift(reff_data, curr_data, data_version):
+def visualize_drift(reff_data, curr_data, data_version:str):
     n = len(curr_data.columns)
 
     if n<=5:
@@ -25,8 +18,8 @@ def visualize_drift(reff_data, curr_data, data_version):
     plt.rcParams.update({'font.size': 8})
 
     for idx, col in enumerate(reff_data.columns):
-        sns.kdeplot(reff_data[col], ax=axes[idx] , color='blue', label='ref')
-        sns.kdeplot(curr_data[col], ax=axes[idx], color='orange', label='curr')
+        sns.kdeplot(reff_data[col], ax=axes[idx] , color='orange', label='ref')
+        sns.kdeplot(curr_data[col], ax=axes[idx], color='blue', label='curr')
         axes[idx].legend(fontsize=6)
 
     plt.tight_layout()
@@ -34,10 +27,23 @@ def visualize_drift(reff_data, curr_data, data_version):
 
 
 
-def evaluate_drift(reff_data, curr_data, threshold:float=1.2):
+def evaluate_drift(reff_data, curr_data, threshold:float=1.2, dataset_drift_share:float=0.5):
+    drift = {}
+
     data_drift_report = Report(metrics=[
-    DataDriftPreset(stattest='kl_div', stattest_threshold=threshold,)
+    DataDriftPreset(stattest='kl_div', stattest_threshold=.8, drift_share=dataset_drift_share),
     ])
+
 
     data_drift_report.run(current_data=curr_data, reference_data=reff_data)
     drift_report_dict = data_drift_report.as_dict()
+
+    drift = {**drift_report_dict['metrics'][0]['result']}
+    drift['column_drift_threshold'] = threshold
+    
+    for key, value in drift_report_dict['metrics'][1]['result']['drift_by_columns'].items():
+        drift[key] = value['drift_score']
+
+    return drift
+
+
