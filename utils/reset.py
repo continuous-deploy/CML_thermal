@@ -36,4 +36,5 @@ def reset_configuration():
         os.makedirs(os.path.join(config['metrics_folder'], subfolder))
 
 
-reset_configuration()
+if __name__ == "__main__":
+    reset_configuration()

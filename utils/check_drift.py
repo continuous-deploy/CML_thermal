@@ -5,7 +5,7 @@ import seaborn as sns
 from evidently.report import Report
 from evidently.metric_preset import DataDriftPreset
 
-def visualize_drift(reff_data, curr_data, data_version:str):
+def visualize_drift(reff_data, curr_data, data_version):
     n = len(curr_data.columns)
 
     if n<=5:
@@ -17,8 +17,10 @@ def visualize_drift(reff_data, curr_data, data_version:str):
     axes = axes.flatten()
     plt.rcParams.update({'font.size': 8})
 
-    for idx, col in enumerate(reff_data.columns):
-        sns.kdeplot(reff_data[col], ax=axes[idx] , color='orange', label='ref')
+    ref_col = reff_data.columns
+    
+    for idx, col in enumerate(curr_data.columns):
+        sns.kdeplot(reff_data[ref_col], ax=axes[idx] , color='orange', label='ref')
         sns.kdeplot(curr_data[col], ax=axes[idx], color='blue', label='curr')
         axes[idx].legend(fontsize=6)
 
