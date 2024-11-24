@@ -1,55 +1,49 @@
-import pandas as pd
-import numpy as np
+import math
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.stats import entropy
-import os
-from datetime import datetime
+
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+
+def visualize_drift(reff_data, curr_data, data_version:str):
+    n = len(curr_data.columns)
+
+    if n<=5:
+        fig, axes = plt.subplots(nrows=5, ncols=1, figsize=(3, 6))
+    else:
+        n_row = math.ceil(n/2)
+        fig, axes = plt.subplots(nrows=n_row, ncols=2, figsize=(5, 7))
+        
+    axes = axes.flatten()
+    plt.rcParams.update({'font.size': 8})
+
+    for idx, col in enumerate(reff_data.columns):
+        sns.kdeplot(reff_data[col], ax=axes[idx] , color='orange', label='ref')
+        sns.kdeplot(curr_data[col], ax=axes[idx], color='blue', label='curr')
+        axes[idx].legend(fontsize=6)
+
+    plt.tight_layout()
+    plt.savefig(f'metrics/drift/data_{data_version}.png')
 
 
 
-new_data = pd.read_csv("temp/simple_milling_data.csv")
+def evaluate_drift(reff_data, curr_data, threshold:float=1.2, dataset_drift_share:float=0.5):
+    drift = {}
 
-# 1. Compare summary statistics
-#print("Original Data Summary Statistics:")
-#print(data.describe())
-
-print("\nNew Data Summary Statistics:")
-print(new_data.describe())
-
-# 2. Visualize data distribution comparison with KDE plots for drift detection
-fig, axes = plt.subplots(nrows=4, ncols=2, figsize=(14, 16))
-axes = axes.flatten()
-
-for idx, col in enumerate(old_data.columns):
-    sns.kdeplot(old_data[col], ax=axes[idx], label='Original Data', color='blue')
-    sns.kdeplot(new_data[col], ax=axes[idx], label='New Data', color='orange')
-    axes[idx].set_title(f'Distribution of {col}')
-    axes[idx].legend()
-
-plt.tight_layout()
-
-# Create directory if it doesn't exist
-save_path = "metrics/drift"
-os.makedirs(save_path, exist_ok=True)
-plot_path = os.path.join(save_path, f'data_distribution{datetime.now().date()}.png')
-
-# Save the plot
-plt.savefig(plot_path)
+    data_drift_report = Report(metrics=[
+    DataDriftPreset(stattest='kl_div', stattest_threshold=.8, drift_share=dataset_drift_share),
+    ])
 
 
-# 3. Statistical Test for Drift: Calculate KL Divergence between original and new data for each column
-kl_divergence = {}
-for col in data.columns:
-    # Use histogram bins for KL divergence calculation
-    hist_original, bin_edges = np.histogram(data[col], bins=20, density=True)
-    hist_new, _ = np.histogram(new_data[col], bins=bin_edges, density=True)
+    data_drift_report.run(current_data=curr_data, reference_data=reff_data)
+    drift_report_dict = data_drift_report.as_dict()
+
+    drift = {**drift_report_dict['metrics'][0]['result']}
+    drift['column_drift_threshold'] = threshold
     
-    # Avoid division by zero by adding a small value to zero bins
-    kl_divergence[col] = entropy(hist_original + 1e-10, hist_new + 1e-10)
+    for key, value in drift_report_dict['metrics'][1]['result']['drift_by_columns'].items():
+        drift[key] = value['drift_score']
 
-print("\nKL Divergence for each feature:")
-for col, kl_val in kl_divergence.items():
-    print(f"{col}: {kl_val:.4f}")
+    return drift
 
-# Interpretation: Higher KL Divergence indicates significant drift in that feature
+
