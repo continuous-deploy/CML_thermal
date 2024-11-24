@@ -100,8 +100,8 @@ def analyse_model_and_make_report():
 
 
     # The file path to your CSV
-    old_model_performanc = 'metrics/old_model_performance.csv'
-    new_model_performanc = 'metrics/new_model_performance.csv'
+    old_model_performanc = 'report/old_model_performance.csv'
+    new_model_performanc = 'report/new_model_performance.csv'
 
 
     # The new line of data to be added (ensure it matches the column structure)
