@@ -1,7 +1,17 @@
 import os
+import pandas as pd
 import re
 import shutil
 from train import analyse_model_and_make_report
+from utils.reset import reset_configuration
+from utils.check_drift import evaluate_drift, visualize_drift
+from utils.segregated_excel import extract_sheets_from_excel
+
+# Reset file data file and folders
+reset_configuration()
+
+# Extract sheets from excel file as csv
+extract_sheets_from_excel()
 
 # To disable floating-point round-off errors from different computation orders
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
@@ -27,11 +37,17 @@ csv_files.sort(key=extract_number_from_filename)
 # Step 2: Make a list of full file paths
 file_paths = [os.path.join(source_dir, file) for file in csv_files]
 
+
+ref_file = pd.read_csv(file_paths[0])
+
 # Step 3: Iterate through the list and move each file
 for file_path in file_paths:
     # Construct the destination file path
     destination_path = os.path.join(destination_dir, os.path.basename(file_path))
     
+    curr_file = pd.read_csv(destination_path)
+
+
     # Move the file to the destination folder
     shutil.move(file_path, destination_path)
     print(f"{destination_path}  &&&&  {file_path}")
