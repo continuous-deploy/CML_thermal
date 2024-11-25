@@ -5,7 +5,8 @@ excel_csv/*.csv
 CMLenv/
 *env
 *Env 
-/data
+data
 temp/
 *.pyc
 __pyache__
+metrics

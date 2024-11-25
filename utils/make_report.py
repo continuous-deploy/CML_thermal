@@ -36,7 +36,7 @@ def create_report(folder_path = "metrics"):
 
     # Adjust layout and save the final report image
     plt.tight_layout()
-    plt.savefig(f'report/combined_report_{int(datetime.now().timestamp())}.png', dpi=300)  # Save as a high-resolution image
+    plt.savefig(f'metrics/combined_report/combined_report_{int(datetime.now().timestamp())}.png', dpi=300)  # Save as a high-resolution image
 
 
 
