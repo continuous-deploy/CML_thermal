@@ -1,6 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
 
 from evidently.report import Report
 from evidently.metric_preset import DataDriftPreset
@@ -18,14 +19,15 @@ def visualize_drift(reff_data, curr_data, data_version):
     plt.rcParams.update({'font.size': 8})
 
     ref_col = reff_data.columns
-    
+    # print("plotting...")
     for idx, col in enumerate(curr_data.columns):
-        sns.kdeplot(reff_data[ref_col], ax=axes[idx] , color='orange', label='ref')
+        sns.kdeplot(reff_data[ref_col[idx]], ax=axes[idx] , color='orange', label='ref')
         sns.kdeplot(curr_data[col], ax=axes[idx], color='blue', label='curr')
-        axes[idx].legend(fontsize=6)
+        axes[idx].legend(fontsize=6, frameon=False, loc='upper right')
 
     plt.tight_layout()
     plt.savefig(f'metrics/drift/data_{data_version}.png')
+    plt.close(fig)
 
 
 
@@ -49,3 +51,10 @@ def evaluate_drift(reff_data, curr_data, threshold:float=1.2, dataset_drift_shar
     return drift
 
 
+
+
+if __name__ == "__main__":
+    reff_data = pd.read_csv('data/TM1.csv')
+    curr_data = pd.read_csv('data/TM2.csv')
+    visualize_drift(reff_data, curr_data, 99)
+    print("hello")

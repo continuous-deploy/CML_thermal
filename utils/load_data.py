@@ -4,6 +4,7 @@ from typing import List
 from pandas import DataFrame
 
 data_folder_path = "data"
+cols = ["Dia Disp", "Ambient", "Ref Temp on Bed", "Spindle Rear", "Coolantwall", "Transfomerbed", "Spindle Front", "Time"]
 
 def get_most_recent_files(data_folder_path: str = data_folder_path, num_files: int = 3) -> List[str]:
     file_lst = []
@@ -27,4 +28,5 @@ def get_most_recent_files(data_folder_path: str = data_folder_path, num_files: i
 def load_data(file_count: int = 3) -> List[DataFrame]:
     file_lst = get_most_recent_files(data_folder_path, file_count)
     df_lst = [pd.read_csv(file_) for file_ in file_lst]
+    df_lst = [df.rename(columns=dict(zip(df.columns, cols))) for df in df_lst]
     return df_lst
