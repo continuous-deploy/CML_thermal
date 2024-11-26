@@ -5,7 +5,7 @@ import shutil
 # delete and create a empty 'temp' folder in rootto store temporary preprocessed data
 # delete metrics folder and create it with subfolders as ann, lstm, drift, xgboost, random_forest
 # Check if excel-data file exist or not?
-
+# In model performance csv we will add a new column with zeros.
 
 
 def reset_configuration():

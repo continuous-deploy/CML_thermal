@@ -121,3 +121,7 @@ def analyse_model_and_make_report():
 
 
     create_report()
+
+
+if __name__ == "__main__":
+    analyse_model_and_make_report()
