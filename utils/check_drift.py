@@ -31,11 +31,11 @@ def visualize_drift(reff_data, curr_data, data_version):
 
 
 
-def evaluate_drift(reff_data, curr_data, threshold:float=1.2, dataset_drift_share:float=0.5):
+def evaluate_drift(reff_data, curr_data, threshold:float=0.05, dataset_drift_share:float=0.5):
     drift = {}
 
     data_drift_report = Report(metrics=[
-    DataDriftPreset(stattest='kl_div', stattest_threshold=.8, drift_share=dataset_drift_share),
+    DataDriftPreset(stattest='kl_div', stattest_threshold=threshold, drift_share=dataset_drift_share),
     ])
 
 
