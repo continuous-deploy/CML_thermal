@@ -306,6 +306,11 @@ Install CML_thermal using one of the following methods:
 ❯ cd CML_thermal
 ```
 
+2.5 Create environment
+```sh
+python3 -m venv CMLEnv
+source CMLEnv/bin/activate
+```
 3. Install the project dependencies:
 
 
